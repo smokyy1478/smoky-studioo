@@ -1051,7 +1051,7 @@ async function envoyerAI() {
       throw new Error(donnees.error || "Erreur serveur");
     }
 
-    const texte = donnees.answer;
+   const texte = donnees.reply;
 
     if (!texte) throw new Error("Réponse vide");
 
