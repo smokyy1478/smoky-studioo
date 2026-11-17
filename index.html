@@ -1,0 +1,1104 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SMOKY STUDIO | Creator Dashboard</title>
+
+<style>
+:root {
+  --bg: #171326;
+  --side: #211a35;
+  --card: #2b2341;
+  --card2: #35294e;
+  --purple: #a970ff;
+  --pink: #f56acb;
+  --text: #ffffff;
+  --muted: #c4b8d7;
+  --border: #55436e;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(130deg, #171326, #29203c);
+  color: var(--text);
+}
+
+button, input, textarea, select {
+  font: inherit;
+}
+
+button { cursor: pointer; }
+
+.app {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 255px;
+  background: var(--side);
+  border-right: 1px solid var(--border);
+  padding: 24px 14px;
+  flex-shrink: 0;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 35px;
+  padding: 5px;
+}
+
+.brand img {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--purple);
+}
+
+.brand strong {
+  font-size: 21px;
+  letter-spacing: 1px;
+}
+
+.brand span { color: var(--purple); }
+
+.menu button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 0;
+  border-radius: 11px;
+  background: transparent;
+  color: #ddd1ed;
+  padding: 14px;
+  margin-bottom: 5px;
+}
+
+.menu button:hover,
+.menu button.active {
+  background: linear-gradient(90deg, #6e3ba8, #4b2b73);
+  color: white;
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+  padding: 30px;
+  max-width: 1600px;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.topbar h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.subtitle {
+  color: var(--muted);
+  margin-top: 8px;
+}
+
+.tag {
+  padding: 10px 15px;
+  border-radius: 30px;
+  background: #4b326b;
+  color: #e9d4ff;
+  font-size: 12px;
+}
+
+.page { display: none; }
+.page.active { display: block; }
+
+.banner {
+  min-height: 300px;
+  border-radius: 22px;
+  background:
+    linear-gradient(90deg, #1b112be8, #1b112b33),
+    url("assets/banniere-smoky.jpeg") center / cover;
+  border: 1px solid #7853a2;
+  display: flex;
+  align-items: center;
+  padding: 40px;
+  margin-bottom: 22px;
+}
+
+.banner h2 {
+  font-size: clamp(35px, 5vw, 65px);
+  margin: 12px 0;
+}
+
+.banner h2 span { color: var(--pink); }
+
+.banner p {
+  color: #eee2fa;
+  max-width: 440px;
+  line-height: 1.6;
+}
+
+.btn {
+  padding: 12px 18px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--card2);
+  color: white;
+  font-weight: bold;
+}
+
+.btn:hover { filter: brightness(1.2); }
+
+.primary {
+  background: linear-gradient(90deg, #873fea, #d74cbd);
+  border: 0;
+}
+
+.danger { background: #70334e; }
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 17px;
+}
+
+.card {
+  background: linear-gradient(145deg, #382b51, #29213d);
+  border: 1px solid var(--border);
+  border-radius: 17px;
+  padding: 22px;
+  margin-bottom: 18px;
+}
+
+.card h3 { margin-top: 0; }
+
+.card p {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.card .emoji {
+  font-size: 30px;
+  margin-bottom: 14px;
+}
+
+.card .btn { margin-top: 12px; }
+
+.panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.panel h2 { margin-top: 0; }
+
+.field {
+  width: 100%;
+  padding: 13px;
+  background: #1d182d;
+  border: 1px solid #71578f;
+  color: white;
+  border-radius: 10px;
+  margin: 8px 0 15px;
+}
+
+textarea.field {
+  min-height: 135px;
+  resize: vertical;
+}
+
+label {
+  display: block;
+  margin-top: 12px;
+  color: #e4d4f5;
+}
+
+video {
+  width: 100%;
+  max-height: 480px;
+  background: black;
+  border-radius: 14px;
+  margin: 15px 0;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.notice {
+  background: #392b51;
+  border-left: 3px solid var(--purple);
+  padding: 14px;
+  border-radius: 9px;
+  margin: 16px 0;
+  line-height: 1.6;
+}
+
+.chat {
+  height: 340px;
+  overflow-y: auto;
+  background: #1b172a;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 15px;
+}
+
+.bubble {
+  background: #3b2c52;
+  padding: 13px;
+  margin: 10px 0;
+  border-radius: 12px;
+  white-space: pre-wrap;
+  line-height: 1.5;
+}
+
+.bubble.me {
+  background: #623d94;
+  margin-left: 12%;
+}
+
+.preview {
+  max-width: 100%;
+  border-radius: 12px;
+  margin-top: 15px;
+}
+
+.miniature-canvas {
+  width: 100%;
+  max-width: 800px;
+  aspect-ratio: 16 / 9;
+  background: #100c1b;
+  border-radius: 12px;
+}
+
+.small {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+@media(max-width: 950px) {
+  .cards { grid-template-columns: repeat(2, 1fr); }
+  .sidebar { width: 205px; }
+  .content { padding: 20px; }
+}
+
+@media(max-width: 650px) {
+  .app { display: block; }
+  .sidebar { width: 100%; padding: 12px; }
+  .brand { margin-bottom: 10px; }
+  .menu {
+    display: flex;
+    overflow-x: auto;
+    gap: 5px;
+  }
+  .menu button {
+    width: auto;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  .cards { grid-template-columns: 1fr; }
+  .banner { min-height: 230px; padding: 22px; }
+  .topbar .tag { display: none; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<aside class="sidebar">
+
+  <div class="brand">
+    <img src="assets/logo-smoky.jpeg" alt="Logo Smoky">
+    <strong>SMOKY <span>STUDIO</span></strong>
+  </div>
+
+  <nav class="menu">
+    <button class="active" onclick="ouvrir('accueil',this)">🏠 Accueil</button>
+    <button onclick="ouvrir('clips',this)">✂️ Clip Studio</button>
+    <button onclick="ouvrir('clipai',this)">🤖 Clip AI</button>
+    <button onclick="ouvrir('bibliotheque',this)">📁 Mes clips</button>
+    <button onclick="ouvrir('planning',this)">📅 Planning</button>
+    <button onclick="ouvrir('live',this)">🔴 Live Center</button>
+    <button onclick="ouvrir('miniatures',this)">🖼️ Miniatures</button>
+    <button onclick="ouvrir('fichiers',this)">📂 Mes fichiers</button>
+    <button onclick="ouvrir('smokyai',this)">✨ Smoky AI</button>
+    <button onclick="ouvrir('analytics',this)">📊 Analytics</button>
+    <button onclick="ouvrir('creator',this)">🎮 Creator Lab</button>
+    <button onclick="ouvrir('parametres',this)">⚙️ Paramètres</button>
+  </nav>
+
+</aside>
+
+<main class="content">
+
+<div class="topbar">
+  <div>
+    <h1 id="titrePage">Tableau de bord</h1>
+    <div class="subtitle">Ton espace de création YouTube & TikTok</div>
+  </div>
+  <span class="tag">💜 SMOKY YT</span>
+</div>
+
+<section class="page active" id="accueil">
+
+  <div class="banner">
+    <div>
+      <span class="tag">CREATOR STUDIO</span>
+      <h2>SMOKY <span>STUDIO</span></h2>
+      <p>
+        Un seul endroit pour préparer tes lives,
+        créer tes clips, organiser ton planning
+        et développer ta communauté.
+      </p>
+      <button class="btn primary"
+        onclick="aller('clips')">
+        ✂️ Créer un clip
+      </button>
+    </div>
+  </div>
+
+  <div class="cards">
+
+    <div class="card">
+      <div class="emoji">✂️</div>
+      <h3>Clip Studio</h3>
+      <p>Prépare les meilleurs passages de tes rediffusions.</p>
+      <button class="btn" onclick="aller('clips')">Ouvrir</button>
+    </div>
+
+    <div class="card">
+      <div class="emoji">🤖</div>
+      <h3>Clip AI</h3>
+      <p>Prépare tes moments forts et tes futurs Shorts.</p>
+      <button class="btn" onclick="aller('clipai')">Ouvrir</button>
+    </div>
+
+    <div class="card">
+      <div class="emoji">✨</div>
+      <h3>Smoky AI</h3>
+      <p>Ton assistant créatif connecté à OpenAI.</p>
+      <button class="btn" onclick="aller('smokyai')">Ouvrir</button>
+    </div>
+
+    <div class="card">
+      <div class="emoji">📅</div>
+      <h3>Planning</h3>
+      <p>Organise tes lives et publications chaque semaine.</p>
+      <button class="btn" onclick="aller('planning')">Ouvrir</button>
+    </div>
+
+    <div class="card">
+      <div class="emoji">🖼️</div>
+      <h3>Miniatures</h3>
+      <p>Prépare tes miniatures YouTube en 1280 × 720.</p>
+      <button class="btn" onclick="aller('miniatures')">Ouvrir</button>
+    </div>
+
+    <div class="card">
+      <div class="emoji">📊</div>
+      <h3>Analytics</h3>
+      <p>Suis les statistiques de ta progression.</p>
+      <button class="btn" onclick="aller('analytics')">Ouvrir</button>
+    </div>
+
+  </div>
+
+</section>
+
+<section class="page" id="clips">
+
+  <div class="panel">
+    <h2>✂️ Clip Studio</h2>
+    <p>Découpe facilement tes propres rediffusions.</p>
+
+    <div class="notice">
+      1. Télécharge ton live depuis YouTube Studio.<br>
+      2. Importe la vidéo ici.<br>
+      3. Marque le début et la fin du passage.<br>
+      4. Prévisualise ton clip.
+    </div>
+
+    <label>Choisir une vidéo</label>
+    <input class="field" type="file"
+      id="videoFile" accept="video/*">
+
+    <video id="video" controls></video>
+
+    <div class="row">
+      <button class="btn" onclick="marquerDebut()">📍 Début</button>
+      <button class="btn" onclick="marquerFin()">📍 Fin</button>
+      <button class="btn primary" onclick="voirClip()">▶ Prévisualiser</button>
+    </div>
+
+    <p id="clipResult" class="small"></p>
+
+    <div class="notice">
+      Cette première version permet de sélectionner et
+      prévisualiser un passage. L'export vidéo sera
+      ajouté séparément.
+    </div>
+  </div>
+
+</section>
+
+<section class="page" id="clipai">
+  <div class="panel">
+    <h2>🤖 Clip AI</h2>
+    <p>Prépare jusqu'à 30 moments forts à découper.</p>
+
+    <label>Nom du moment</label>
+    <input class="field" id="momentNom"
+      placeholder="Ex : Ma réaction incroyable">
+
+    <label>Début en secondes</label>
+    <input class="field" type="number" id="momentDebut" min="0">
+
+    <label>Fin en secondes</label>
+    <input class="field" type="number" id="momentFin" min="0">
+
+    <button class="btn primary" onclick="ajouterMoment()">
+      + Ajouter un moment
+    </button>
+
+    <div id="listeMoments"></div>
+
+    <div class="notice">
+      La détection automatique par IA n'est pas encore
+      activée. Ici, tu organises tes passages manuellement.
+    </div>
+  </div>
+</section>
+
+<section class="page" id="bibliotheque">
+  <div class="panel">
+    <h2>📁 Mes clips</h2>
+    <p>Retrouve les passages que tu as sélectionnés.</p>
+    <div id="clipsSauves"></div>
+  </div>
+</section>
+
+<section class="page" id="planning">
+  <div class="panel">
+    <h2>📅 Mon planning hebdomadaire</h2>
+
+    <p>
+      Chaque semaine, demande ton planning à ChatGPT,
+      copie le résultat et colle-le ici.
+    </p>
+
+    <button class="btn" onclick="copierDemande()">
+      📋 Copier ma demande de planning
+    </button>
+
+    <button class="btn" onclick="window.open('https://chatgpt.com','_blank')">
+      Ouvrir ChatGPT
+    </button>
+
+    <label>Mon planning de la semaine</label>
+    <textarea class="field" id="planningTexte"
+      placeholder="Colle ici ton planning complet..."></textarea>
+
+    <button class="btn primary" onclick="sauverPlanning()">
+      💾 Enregistrer
+    </button>
+
+    <p id="planningEtat" class="small"></p>
+  </div>
+</section>
+
+<section class="page" id="live">
+  <div class="panel">
+    <h2>🔴 Live Center</h2>
+
+    <label>Jeu</label>
+    <input class="field" id="jeuLive" value="GTA 6">
+
+    <label>Concept du live</label>
+    <input class="field" id="conceptLive"
+      placeholder="Ex : Découverte, défis, missions...">
+
+    <button class="btn primary" onclick="preparerLive()">
+      Préparer mon live
+    </button>
+
+    <textarea class="field" id="resultatLive"
+      placeholder="Ton titre et ta description apparaîtront ici..."></textarea>
+  </div>
+</section>
+
+<section class="page" id="miniatures">
+  <div class="panel">
+    <h2>🖼️ Éditeur de miniatures</h2>
+
+    <label>Importer ton image de fond</label>
+    <input class="field" type="file"
+      id="imageMiniature" accept="image/*">
+
+    <label>Texte de la miniature</label>
+    <input class="field" id="texteMiniature"
+      value="LIVE GTA 6 !">
+
+    <label>Couleur du texte</label>
+    <input type="color" id="couleurMiniature" value="#ffffff">
+
+    <p>Aperçu :</p>
+
+    <canvas id="canvasMiniature"
+      class="miniature-canvas"
+      width="1280" height="720"></canvas>
+
+    <p>
+      <button class="btn primary"
+        onclick="dessinerMiniature()">
+        Actualiser
+      </button>
+
+      <button class="btn"
+        onclick="telechargerMiniature()">
+        ⬇ Télécharger PNG
+      </button>
+    </p>
+  </div>
+</section>
+
+<section class="page" id="fichiers">
+  <div class="panel">
+    <h2>📂 Mes fichiers</h2>
+    <p>Répertorie les fichiers de ton ordinateur.</p>
+
+    <input class="field" type="file"
+      id="mesFichiers" multiple>
+
+    <div id="listeFichiers"></div>
+
+    <p class="small">
+      Cette liste n'envoie pas tes fichiers sur un serveur.
+    </p>
+  </div>
+</section>
+
+<section class="page" id="smokyai">
+  <div class="panel">
+    <h2>✨ Smoky AI</h2>
+    <p>Ton véritable assistant IA pour les lives et les vidéos.</p>
+
+    <div class="notice">
+      Pour activer l'IA, il faudra connecter ton
+      Cloudflare Worker avec une clé OpenAI protégée.
+    </div>
+
+    <label>Adresse du Worker Cloudflare</label>
+    <input class="field" id="workerUrl"
+      placeholder="https://smoky-ai....workers.dev">
+
+    <label>Code d'accès privé</label>
+    <input class="field" id="workerCode"
+      type="password"
+      placeholder="Ton code d'accès">
+
+    <button class="btn" onclick="sauverWorker()">
+      Enregistrer l'adresse
+    </button>
+
+    <h3>Conversation</h3>
+    <div class="chat" id="chat"></div>
+
+    <textarea class="field" id="messageAI"
+      placeholder="Écris à Smoky AI..."></textarea>
+
+    <button class="btn primary" id="envoyerAI"
+      onclick="envoyerAI()">
+      Envoyer à Smoky AI
+    </button>
+  </div>
+</section>
+
+<section class="page" id="analytics">
+  <div class="panel">
+    <h2>📊 Mes statistiques</h2>
+
+    <label>Abonnés YouTube</label>
+    <input class="field" type="number" id="statYoutube">
+
+    <label>Abonnés TikTok</label>
+    <input class="field" type="number" id="statTikTok">
+
+    <label>Vues du mois</label>
+    <input class="field" type="number" id="statVues">
+
+    <button class="btn primary" onclick="sauverStats()">
+      Enregistrer
+    </button>
+
+    <p class="small">
+      Les chiffres sont saisis manuellement.
+    </p>
+  </div>
+</section>
+
+<section class="page" id="creator">
+  <div class="panel">
+    <h2>🎮 Creator Lab</h2>
+
+    <p>Prépare tes idées de Shorts et de vidéos.</p>
+
+    <label>Mon idée</label>
+    <input class="field" id="ideeVideo"
+      placeholder="Ex : Une mission impossible dans GTA 6">
+
+    <button class="btn primary" onclick="genererIdee()">
+      Préparer mon concept
+    </button>
+
+    <textarea class="field" id="resultatIdee"></textarea>
+  </div>
+</section>
+
+<section class="page" id="parametres">
+  <div class="panel">
+    <h2>⚙️ Paramètres</h2>
+    <p>SMOKY STUDIO — Créé pour Smoky YT.</p>
+    <p>Thème : Violet & Rose</p>
+    <p>Sauvegarde : navigateur local</p>
+    <p>Hébergement prévu : GitHub Pages</p>
+  </div>
+</section>
+
+</main>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+
+const titres = {
+  accueil: "Tableau de bord",
+  clips: "Clip Studio",
+  clipai: "Clip AI",
+  bibliotheque: "Mes clips",
+  planning: "Mon planning",
+  live: "Live Center",
+  miniatures: "Mes miniatures",
+  fichiers: "Mes fichiers",
+  smokyai: "Smoky AI",
+  analytics: "Analytics",
+  creator: "Creator Lab",
+  parametres: "Paramètres"
+};
+
+function ouvrir(id, bouton) {
+  document.querySelectorAll(".page").forEach(p => {
+    p.classList.remove("active");
+  });
+
+  $(id).classList.add("active");
+
+  document.querySelectorAll(".menu button").forEach(b => {
+    b.classList.remove("active");
+  });
+
+  if (bouton) bouton.classList.add("active");
+
+  $("titrePage").textContent = titres[id];
+}
+
+function aller(id) {
+  const bouton = document.querySelector(
+    '.menu button[onclick*="' + id + '"]'
+  );
+  ouvrir(id, bouton);
+}
+
+function stocker(cle, valeur) {
+  localStorage.setItem(cle, JSON.stringify(valeur));
+}
+
+function lire(cle, defaut) {
+  try {
+    return JSON.parse(localStorage.getItem(cle)) ?? defaut;
+  } catch {
+    return defaut;
+  }
+}
+
+// CLIP STUDIO
+let debut = 0;
+let fin = 0;
+let videoURL = null;
+const video = $("video");
+
+$("videoFile").onchange = e => {
+  const fichier = e.target.files[0];
+  if (!fichier) return;
+
+  if (videoURL) URL.revokeObjectURL(videoURL);
+
+  videoURL = URL.createObjectURL(fichier);
+  video.src = videoURL;
+  debut = 0;
+  fin = 0;
+  $("clipResult").textContent = "Vidéo chargée.";
+};
+
+function marquerDebut() {
+  debut = video.currentTime;
+  $("clipResult").textContent =
+    "Début : " + debut.toFixed(1) + " s";
+}
+
+function marquerFin() {
+  fin = video.currentTime;
+  $("clipResult").textContent =
+    "Début : " + debut.toFixed(1) +
+    " s | Fin : " + fin.toFixed(1) + " s";
+}
+
+function voirClip() {
+  if (!video.src || fin <= debut) {
+    alert("Choisis un début et une fin valides.");
+    return;
+  }
+
+  video.currentTime = debut;
+  video.play();
+}
+
+video.ontimeupdate = () => {
+  if (fin > debut && video.currentTime >= fin) {
+    video.pause();
+  }
+};
+
+// CLIP AI : sélection manuelle
+let moments = lire("smokyMoments", []);
+
+function afficherMoments() {
+  const zone = $("listeMoments");
+  zone.replaceChildren();
+
+  moments.forEach((moment, index) => {
+    const div = document.createElement("div");
+    div.className = "notice";
+
+    const texte = document.createElement("span");
+    texte.textContent =
+      moment.nom + " | " +
+      moment.debut + " s → " +
+      moment.fin + " s ";
+
+    const bouton = document.createElement("button");
+    bouton.className = "btn danger";
+    bouton.textContent = "Supprimer";
+    bouton.onclick = () => {
+      moments.splice(index, 1);
+      stocker("smokyMoments", moments);
+      afficherMoments();
+    };
+
+    div.append(texte, bouton);
+    zone.append(div);
+  });
+
+  $("clipsSauves").replaceChildren(zone.cloneNode(true));
+}
+
+function ajouterMoment() {
+  const nom = $("momentNom").value.trim() || "Moment fort";
+  const d = Number($("momentDebut").value);
+  const f = Number($("momentFin").value);
+
+  if (moments.length >= 30) {
+    alert("Maximum 30 moments.");
+    return;
+  }
+
+  if (!Number.isFinite(d) ||
+      !Number.isFinite(f) ||
+      d < 0 || f <= d) {
+    alert("Vérifie les secondes.");
+    return;
+  }
+
+  moments.push({ nom, debut: d, fin: f });
+  stocker("smokyMoments", moments);
+  afficherMoments();
+}
+
+afficherMoments();
+
+// PLANNING
+$("planningTexte").value = lire("smokyPlanning", "");
+
+function sauverPlanning() {
+  stocker("smokyPlanning", $("planningTexte").value);
+  $("planningEtat").textContent = "Planning enregistré !";
+}
+
+function copierDemande() {
+  const demande =
+    "Prépare mon planning complet pour les 7 prochains jours " +
+    "pour ma chaîne Smoky YT. Je suis en République dominicaine " +
+    "et je vise un public français. Prévois les lives PS5, " +
+    "Shorts TikTok, montages, publications Instagram et repos. " +
+    "Donne les horaires France et République dominicaine, " +
+    "les titres et les tâches quotidiennes. " +
+    "Fais un texte clair à copier-coller dans Smoky Studio.";
+
+  navigator.clipboard.writeText(demande).then(
+    () => alert("Demande copiée !"),
+    () => alert("Copie impossible. Ouvre ChatGPT manuellement.")
+  );
+}
+
+// LIVE CENTER
+function preparerLive() {
+  const jeu = $("jeuLive").value || "GTA 6";
+  const concept = $("conceptLive").value || "Découverte";
+
+  $("resultatLive").value =
+    "TITRE : 🔴 " + jeu + " — " + concept + " !\n\n" +
+    "DESCRIPTION :\n" +
+    "Bienvenue sur Smoky YT ! Aujourd'hui : " +
+    concept + " sur " + jeu + ".\n" +
+    "Abonne-toi et participe au chat !\n\n" +
+    "TIKTOK : Retrouve le live complet sur Smoky YT.";
+}
+
+// MINIATURES
+const canvas = $("canvasMiniature");
+const ctx = canvas.getContext("2d");
+let imageFond = null;
+
+$("imageMiniature").onchange = e => {
+  const fichier = e.target.files[0];
+  if (!fichier) return;
+
+  const url = URL.createObjectURL(fichier);
+  const img = new Image();
+
+  img.onload = () => {
+    imageFond = img;
+    dessinerMiniature();
+    URL.revokeObjectURL(url);
+  };
+
+  img.src = url;
+};
+
+function dessinerMiniature() {
+  ctx.fillStyle = "#241238";
+  ctx.fillRect(0, 0, 1280, 720);
+
+  if (imageFond) {
+    const ratio = Math.max(
+      1280 / imageFond.width,
+      720 / imageFond.height
+    );
+
+    const w = imageFond.width * ratio;
+    const h = imageFond.height * ratio;
+
+    ctx.drawImage(
+      imageFond,
+      (1280 - w) / 2,
+      (720 - h) / 2,
+      w, h
+    );
+  }
+
+  const degrade = ctx.createLinearGradient(0, 0, 1280, 0);
+  degrade.addColorStop(0, "#180b2acc");
+  degrade.addColorStop(1, "#180b2a11");
+  ctx.fillStyle = degrade;
+  ctx.fillRect(0, 0, 1280, 720);
+
+  const texte = $("texteMiniature").value || "SMOKY YT";
+  ctx.fillStyle = $("couleurMiniature").value;
+  ctx.font = "bold 88px Arial";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.shadowColor = "#000000";
+  ctx.shadowBlur = 22;
+
+  const mots = texte.split(" ");
+  let lignes = [""];
+  mots.forEach(mot => {
+    const i = lignes.length - 1;
+    const test = (lignes[i] + " " + mot).trim();
+
+    if (ctx.measureText(test).width > 1100 && lignes[i]) {
+      lignes.push(mot);
+    } else {
+      lignes[i] = test;
+    }
+  });
+
+  lignes.slice(0, 4).forEach((ligne, i) => {
+    ctx.fillText(
+      ligne,
+      640,
+      360 + (i - (Math.min(lignes.length, 4) - 1) / 2) * 105
+    );
+  });
+
+  ctx.shadowBlur = 0;
+}
+
+function telechargerMiniature() {
+  dessinerMiniature();
+
+  const lien = document.createElement("a");
+  lien.download = "miniature-smoky.png";
+  lien.href = canvas.toDataURL("image/png");
+  lien.click();
+}
+
+dessinerMiniature();
+
+// MES FICHIERS
+$("mesFichiers").onchange = e => {
+  const zone = $("listeFichiers");
+  zone.replaceChildren();
+
+  Array.from(e.target.files).forEach(fichier => {
+    const p = document.createElement("p");
+    p.textContent = "📄 " + fichier.name;
+    zone.append(p);
+  });
+};
+
+// SMOKY AI
+$("workerUrl").value = lire("smokyWorker", "");
+
+function sauverWorker() {
+  const url = $("workerUrl").value.trim();
+
+  if (!url.startsWith("https://")) {
+    alert("Entre une adresse HTTPS valide.");
+    return;
+  }
+
+  stocker("smokyWorker", url);
+  alert("Adresse enregistrée !");
+}
+
+const historique = [];
+
+function bulle(texte, moi = false) {
+  const div = document.createElement("div");
+  div.className = "bubble" + (moi ? " me" : "");
+  div.textContent = texte;
+
+  $("chat").append(div);
+  $("chat").scrollTop = $("chat").scrollHeight;
+}
+
+async function envoyerAI() {
+  const question = $("messageAI").value.trim();
+  const url = $("workerUrl").value.trim();
+  const code = $("workerCode").value;
+  const bouton = $("envoyerAI");
+
+  if (!question) return;
+
+  if (!url || !code) {
+    alert("Configure ton Worker et ton code privé.");
+    return;
+  }
+
+  const messages = [
+    ...historique.slice(-18),
+    { role: "user", content: question }
+  ];
+
+  bulle(question, true);
+  $("messageAI").value = "";
+
+  bouton.disabled = true;
+  bouton.textContent = "Smoky réfléchit...";
+
+  try {
+    const reponse = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Smoky-Code": code
+      },
+      body: JSON.stringify({ messages })
+    });
+
+    const donnees = await reponse.json();
+
+    if (!reponse.ok) {
+      throw new Error(donnees.error || "Erreur serveur");
+    }
+
+    const texte = donnees.answer;
+
+    if (!texte) throw new Error("Réponse vide");
+
+    historique.push(
+      { role: "user", content: question },
+      { role: "assistant", content: texte }
+    );
+
+    bulle(texte);
+
+  } catch (erreur) {
+    bulle("Connexion impossible : " + erreur.message);
+  } finally {
+    bouton.disabled = false;
+    bouton.textContent = "Envoyer à Smoky AI";
+  }
+}
+
+// ANALYTICS
+["statYoutube", "statTikTok", "statVues"].forEach(id => {
+  $(id).value = lire(id, "");
+});
+
+function sauverStats() {
+  ["statYoutube", "statTikTok", "statVues"].forEach(id => {
+    stocker(id, $(id).value);
+  });
+
+  alert("Statistiques enregistrées !");
+}
+
+// CREATOR LAB
+function genererIdee() {
+  const idee = $("ideeVideo").value.trim();
+
+  if (!idee) return;
+
+  $("resultatIdee").value =
+    "CONCEPT : " + idee + "\n\n" +
+    "ACCROCHE : Vous n'allez pas croire ce qui s'est passé !\n\n" +
+    "DÉROULEMENT :\n" +
+    "1. Montrer le moment le plus intéressant.\n" +
+    "2. Expliquer rapidement le défi.\n" +
+    "3. Montrer la réaction finale.\n\n" +
+    "CONCLUSION : Retrouve-moi sur Smoky YT !";
+}
+</script>
+
+</body>
+</html>
